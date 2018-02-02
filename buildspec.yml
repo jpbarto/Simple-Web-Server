@@ -1,0 +1,34 @@
+version: 0.2
+
+env:
+  variables:
+    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+  parameter-store:
+    LOGIN_PASSWORD: "dockerLoginPassword"
+
+phases:
+  install:
+    commands:
+      - echo Entered the install phase...
+      - apt-get update -y
+      - apt-get install -y cmake3 g++ libboost-all-dev
+  pre_build:
+    commands:
+      - echo Entered the pre_build phase...
+      - mkdir build
+  build:
+    commands:
+      - echo Entered the build phase...
+      - echo Build started on `date`
+      - cd build
+      - cmake ..
+      - make
+  post_build:
+    commands:
+      - echo Entered the post_build phase...
+      - mv http_examples target/http-server
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - target/http-server
+  discard-paths: yes
